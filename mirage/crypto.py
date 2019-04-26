@@ -26,11 +26,11 @@ class Crypto:
             return self.try_encrypt(text)
 
     def try_encrypt(self, text):
-            encryptor = Cipher(algorithms.AES(self.key), modes.ECB(), default_backend()).encryptor()
-            padder = padding.PKCS7(algorithms.AES(self.key).block_size).padder()
-            padded_data = padder.update(force_bytes(text)) + padder.finalize()
-            encrypted_text = encryptor.update(padded_data) + encryptor.finalize()
-            return force_text(base64.urlsafe_b64encode(encrypted_text))
+        encryptor = Cipher(algorithms.AES(self.key), modes.ECB(), default_backend()).encryptor()
+        padder = padding.PKCS7(algorithms.AES(self.key).block_size).padder()
+        padded_data = padder.update(force_bytes(text)) + padder.finalize()
+        encrypted_text = encryptor.update(padded_data) + encryptor.finalize()
+        return force_text(base64.urlsafe_b64encode(encrypted_text))
 
     def try_decrypt(self, encrypted_text):
         decryptor = Cipher(algorithms.AES(self.key), modes.ECB(), default_backend()).decryptor()
