@@ -60,7 +60,7 @@ class TestModel(models.Model):
 
 ### via migrations
 
-add `app_name`,`model_name`,`app_name` in (migrations.RunPython)[https://docs.djangoproject.com/en/2.2/ref/migration-operations/#runpython]
+add `app_name`,`model_name`,`app_name` in [migrations.RunPython](https://docs.djangoproject.com/en/2.2/ref/migration-operations/#runpython)
 
 ```
 from mirage.tools import Migrator
@@ -112,4 +112,4 @@ Only encrypt/decrypt: Average 1 value/ms
 
 ## Clients
 
-* Java
+* [Java](https://github.com/luojilab/django-mirage-field/tree/master/client/java)
