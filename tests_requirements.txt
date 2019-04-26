@@ -1,0 +1,6 @@
+psycopg2
+pymysql
+cryptography
+tqdm
+django
+twine

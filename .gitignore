@@ -1,0 +1,10 @@
+.idea
+venv
+*.pyc
+dist
+django_mirage_field.egg-info/
+build
+.vscode
+client/out
+client/client.iml
+client/java/META-INF
