@@ -1,5 +1,7 @@
 # django-mirage-field
 
+![](https://img.shields.io/pypi/v/django-mirage-field.svg?label=django-mirage-field)
+
 ## Introduce
 
 A Django model field that encrypt your data when save to and decrypt when get from database. It keeps data always encrypted in database.
@@ -94,11 +96,11 @@ Examples
 
 ## Exceptions
 
-### EncryptedFieldException
-
 ```
 from mirage import exceptions
 ```
+
+### EncryptedFieldException
 
 ## Algorithm
 
