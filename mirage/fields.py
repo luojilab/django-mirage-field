@@ -8,14 +8,6 @@ class EncryptedMixin(models.Field):
     prepared_max_length = None
 
     def __init__(self, key=None, **kwargs):
-        if kwargs.get('primary_key'):
-            raise EncryptedFieldException(
-                f"{self.__class__.__name__} does not support primary_key=True"
-            )
-        if kwargs.get('unique'):
-            raise EncryptedFieldException(
-                f"{self.__class__.__name__} does not support unique=True"
-            )
         kwargs.setdefault('max_length', self.prepared_max_length)
         self.crypto = Crypto(key)
         super().__init__(**kwargs)
