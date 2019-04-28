@@ -43,7 +43,6 @@ class Migrator:
             total = model.objects.using(db_alias).latest("id").id
         if limit > total:
             limit = total
-        print(f"\nStart {method} data, total: {total}")
 
         t = tqdm(total=total-offset)
         while offset < total:
@@ -54,9 +53,11 @@ class Migrator:
                     if method in ['encrypt', 'encrypt_to']:
                         value_list.append([query[0], self.crypto.encrypt(query[1])])
                     elif method in ['decrypt', 'decrypt_to']:
-                        value_list.append([query[0], self.crypto.decrypt(query[1]).replace("'", "''")])
+                        text = self.crypto.decrypt(query[1]) or ''
+                        value_list.append([query[0], text.replace("'", "''")])
                     elif method == 'copy':
-                        value_list.append([query[0], query[1].replace("'", "''")])
+                        text = query[1] or ''
+                        value_list.append([query[0], text.replace("'", "''")])
                 execute_sql = ''
                 for value in value_list:
                     if method in ['encrypt', 'decrypt']:
