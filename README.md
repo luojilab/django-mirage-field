@@ -4,34 +4,16 @@
 
 ## Introduce
 
-A Django model field that encrypt your data when save to and decrypt when get from database. It keeps data always encrypted in database.
+A Django model field that encrypt your data when save to and decrypt when get from database. It keeps data always encrypted in database. Base on symmetric encryption, it support query the origin text and return encrypted objects in Django.
 
 ## Support
 
-* Use settings.SECRET_KEY as secret key default or anyelse
+* Use settings.SECRET_KEY as secret key default or anyelse which length >= 32
 * Support CharField、TextField、IntegerField、EmailField
 * Support Django ORM's `get()`、`filter()` query method
 * Use AES-256-ECB algorithm
 * Support PostgreSQL and MySQL database
-
-## Example
-```
-from mirage import fields
-class TestModel(models.Model):
-    phone = fields.EncryptedCharField()
-```
-
-```
-obj = TestModel.objects.get(phone=18866677777)
-obj.id    # 123
-obj.phone # "18866677777"
-```
-```psql
-yourdatabase=# select * from testmodel where id = 123;
-         id          |           name
----------------------+--------------------------
- 123 | -bYijegsEDrmS1s7ilnspA==
-```
+* Support Django model field `db_index` and `unique` attributes
 
 ## Installation
 
@@ -39,30 +21,49 @@ yourdatabase=# select * from testmodel where id = 123;
 pip install django-mirage-field
 ```
 
-## Settings
+## Usage
 
-1. Add`mirage`to`INSTALLED_APPS`
-
-1. import
-
-```
+```python
 from mirage import fields
 class TestModel(models.Model):
-    phone = fields.EncryptedCharField()
+    phone = fields.EncryptedIntegerField()
+```
+
+```python
+obj = TestModel.objects.get(phone=18866677777)
+obj.id          # 123
+obj.phone       # 18866677777
+type(obj.phone) # int
+```
+
+```psql
+database=# select * from testmodel where id = 123;
+         id          |           phone
+---------------------+--------------------------
+ 123 | -bYijegsEDrmS1s7ilnspA==
+```
+
+```python
+from mirage.crypto import Crypto
+c = Crypto(key="")                      # key is optional, default will use settings.SECRET_KEY
+c.encrypt('18866677777')                # -bYijegsEDrmS1s7ilnspA==
+c.decrypt('-bYijegsEDrmS1s7ilnspA==')   # 18866677777
 ```
 
 ## Model Fields
 
-* EncryptedTextField
-* EncryptedCharField
-* EncryptedEmailField
-* EncryptedIntegerField
+1. EncryptedTextField
+2. EncryptedCharField
+3. EncryptedEmailField
+4. EncryptedIntegerField
 
 ## Data Migrate
 
-### via migrations
+Add`mirage`to`INSTALLED_APPS`
 
-add `app_name`,`model_name`,`app_name` in [migrations.RunPython](https://docs.djangoproject.com/en/2.2/ref/migration-operations/#runpython)
+### 1. Migrations
+
+add `app_name`,`model_name`,`field_name` in [migrations.RunPython](https://docs.djangoproject.com/en/2.2/ref/migration-operations/#runpython)
 
 ```
 from mirage.tools import Migrator
@@ -70,7 +71,7 @@ from mirage.tools import Migrator
 migrations.RunPython(Migrator("app_name", "model_name", "field_name").encrypt, reverse_code=Migrator("app_name", 'model_name', 'field_name').decrypt),
 ```
 
-### Management command
+### 2. Commands
 
 Options:
 
@@ -100,11 +101,7 @@ Examples
 from mirage import exceptions
 ```
 
-### EncryptedFieldException
-
-## Algorithm
-
-*  AES-256-ECB
+1. EncryptedFieldException
 
 ## Performance
 
