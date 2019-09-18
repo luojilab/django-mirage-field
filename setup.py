@@ -16,6 +16,7 @@ setup(
     include_package_data=True,
     license='MIT License',
     description='A Django model field that encrypt your data when save to and decrypt when get from database. It keeps data always encrypted in database.',
+    long_description_content_type="text/markdown",
     long_description=README,
     url='https://github.com/luojilab/django-mirage-field',
     author='tcitry',
