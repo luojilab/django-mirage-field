@@ -39,6 +39,7 @@ class Migrator:
             db_alias = router.db_for_write(model=model)
         else:
             db_alias = schema_editor.connection.alias
+        db_table = model._meta.db_table if model._meta.db_table else f"{self.app}_{self.model}"
         if not total:
             total = model.objects.using(db_alias).latest("id").id
         if limit > total:
@@ -48,7 +49,7 @@ class Migrator:
         while offset < total:
             value_list = []
             with connections[db_alias].cursor() as cursor:
-                cursor.execute(f"select id, {self.field} from {self.app}_{self.model} where id>{offset} order by id limit {limit};")
+                cursor.execute(f"select id, {self.field} from {db_table} where id>{offset} order by id limit {limit};")
                 for query in cursor.fetchall():
                     if method in ['encrypt', 'encrypt_to']:
                         value_list.append([query[0], self.crypto.encrypt(query[1])])
@@ -61,9 +62,9 @@ class Migrator:
                 execute_sql = ''
                 for value in value_list:
                     if method in ['encrypt', 'decrypt']:
-                        execute_sql += f"update {self.app}_{self.model} set {self.field}='{value[1]}' where id={value[0]};"
+                        execute_sql += f"update {db_table} set {self.field}='{value[1]}' where id={value[0]};"
                     elif method in ['copy', 'encrypt_to', 'decrypt_to']:
-                        execute_sql += f"update {self.app}_{self.model} set {self.tofield}='{value[1]}' where id={value[0]};"
+                        execute_sql += f"update {db_table} set {self.tofield}='{value[1]}' where id={value[0]};"
                 cursor.execute(execute_sql)
             if value_list:
                 t.update(value_list[-1][0] - offset)
