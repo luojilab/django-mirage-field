@@ -41,7 +41,11 @@ class Migrator:
             db_alias = schema_editor.connection.alias
         db_table = model._meta.db_table if model._meta.db_table else f"{self.app}_{self.model}"
         if not total:
-            total = model.objects.using(db_alias).latest("id").id
+            last_record = model.objects.using(db_alias).order_by("-id").first()
+            if last_record:
+                total = last_record.id
+            else:
+                total = 0
         if limit > total:
             limit = total
 
