@@ -24,7 +24,7 @@ class EncryptedMixin(models.Field):
             return encrypted_text
         return None
 
-    def from_db_value(self, value, expression, connection, context):
+    def from_db_value(self, value, expression, connection, *args):
         if value is not None:
             return self.to_python(self.crypto.decrypt(value))
         return None

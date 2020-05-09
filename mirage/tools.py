@@ -19,8 +19,8 @@ class Migrator:
     def decrypt(self, apps=None, schema_editor=None, offset=0, total=None, limit=1000):
         return self.executor(apps, schema_editor, offset, total, limit, method='decrypt')
 
-    def copy(self, apps=None, schema_editor=None, offset=0, total=None, limit=1000):
-        return self.executor(apps, schema_editor, offset, total, limit, method='copy')
+    def copy_to(self, apps=None, schema_editor=None, offset=0, total=None, limit=1000):
+        return self.executor(apps, schema_editor, offset, total, limit, method='copy_to')
 
     def encrypt_to(self, apps=None, schema_editor=None, offset=0, total=None, limit=1000):
         return self.executor(apps, schema_editor, offset, total, limit, method='encrypt_to')
@@ -41,7 +41,11 @@ class Migrator:
             db_alias = schema_editor.connection.alias
         db_table = model._meta.db_table if model._meta.db_table else f"{self.app}_{self.model}"
         if not total:
-            total = model.objects.using(db_alias).latest("id").id
+            last_record = model.objects.using(db_alias).order_by("-id").first()
+            if last_record:
+                total = last_record.id
+            else:
+                total = 0
         if limit > total:
             limit = total
 
@@ -56,14 +60,14 @@ class Migrator:
                     elif method in ['decrypt', 'decrypt_to']:
                         text = self.crypto.decrypt(query[1]) or ''
                         value_list.append([query[0], text.replace("'", "''")])
-                    elif method == 'copy':
+                    elif method == 'copy_to':
                         text = query[1] or ''
                         value_list.append([query[0], text.replace("'", "''")])
                 execute_sql = ''
                 for value in value_list:
                     if method in ['encrypt', 'decrypt']:
                         execute_sql += f"update {db_table} set {self.field}='{value[1]}' where id={value[0]};"
-                    elif method in ['copy', 'encrypt_to', 'decrypt_to']:
+                    elif method in ['copy_to', 'encrypt_to', 'decrypt_to']:
                         execute_sql += f"update {db_table} set {self.tofield}='{value[1]}' where id={value[0]};"
                 cursor.execute(execute_sql)
             if value_list:

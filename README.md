@@ -78,8 +78,8 @@ Options:
 * --app
 * --model
 * --field
-* --method (optional: `encrypt`, `decrypt`, `encrypt_to`, `decrypt_to`, `copy`)
-* --tofield (need when use `encryt_to`, `decrypt_to`, `copy` method)
+* --method (optional: `encrypt`, `decrypt`, `encrypt_to`, `decrypt_to`, `copy_to`)
+* --tofield (need when use `encryt_to`, `decrypt_to`, `copy_to` method)
 
 Optional options:
 

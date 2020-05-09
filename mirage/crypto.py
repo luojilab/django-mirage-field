@@ -14,10 +14,9 @@ class Crypto:
         if key is None:
             key = getattr(settings, "SECRET_KEY")
             assert len(key) >= 32, "settings.SECRET_KEY length must more than 32!"
-            self.key = base64.urlsafe_b64encode(force_bytes(key))[:32]
         else:
             assert len(key) >= 32, "key length must more than 32!"
-            self.key = key[:32]
+        self.key = base64.urlsafe_b64encode(force_bytes(key))[:32]
 
     def encrypt(self, text):
         if text is None:

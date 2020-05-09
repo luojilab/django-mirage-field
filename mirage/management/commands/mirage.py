@@ -30,9 +30,9 @@ class Command(BaseCommand):
             Migrator(app, model, field).encrypt(offset=offset, total=total, limit=limit)
         elif method == 'decrypt':
             Migrator(app, model, field).decrypt(offset=offset, total=total, limit=limit)
-        elif method == 'copy':
+        elif method == 'copy_to':
             assert tofield is not None
-            Migrator(app, model, field, tofield=tofield).copy(offset=offset, total=total, limit=limit)
+            Migrator(app, model, field, tofield=tofield).copy_to(offset=offset, total=total, limit=limit)
         elif method == 'decrypt_to':
             assert tofield is not None
             Migrator(app, model, field, tofield=tofield).decrypt_to(offset=offset, total=total, limit=limit)
