@@ -50,6 +50,13 @@ c.encrypt('18866677777')                # -bYijegsEDrmS1s7ilnspA==
 c.decrypt('-bYijegsEDrmS1s7ilnspA==')   # 18866677777
 ```
 
+### Settings
+
+You can use the `settings.SECRET_KEY` as default key, if you want custom another key for mirage, set the `MIRAGE_SECRET_KEY` in settings.
+
+Mirage will get the `settings.MIRAGE_SECRET_KEY` first, if not set, mirage will get the `settings.SECRET_KEY`.
+
+
 ## Model Fields
 
 1. EncryptedTextField
