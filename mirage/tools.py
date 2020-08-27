@@ -40,7 +40,7 @@ class Migrator:
         else:
             db_alias = schema_editor.connection.alias
         db_table = model._meta.db_table if model._meta.db_table else f"{self.app}_{self.model}"
-        if limit == 0:
+        if limit == -1:
             total = model.objects.using(db_alias).count()
         else:
             if not total:
@@ -56,7 +56,7 @@ class Migrator:
         while offset < total:
             value_list = []
             with connections[db_alias].cursor() as cursor:
-                if limit == 0:
+                if limit == -1:
                     cursor.execute(f"select id, {self.field} from {db_table};")
                 else:
                     cursor.execute(f"select id, {self.field} from {db_table} where id>{offset} order by id limit {limit};")

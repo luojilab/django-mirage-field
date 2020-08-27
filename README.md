@@ -92,7 +92,7 @@ Optional options:
 
 * --offset ("select * from xxx where id > offset")
 * --total ("select * from xxx order by id limit total")
-* --limit: set the query count in every update, default is 1000, if you set 0, mirage will query all rows one time to update.
+* --limit: set the query count in every update, default is 1000, if you set -1, mirage will query all rows one time to update.
 
 Examples
 
