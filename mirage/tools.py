@@ -58,7 +58,7 @@ class Migrator:
             with connections[db_alias].cursor() as cursor:
                 if limit == 0:
                     cursor.execute(f"select id, {self.field} from {db_table};")
-                else
+                else:
                     cursor.execute(f"select id, {self.field} from {db_table} where id>{offset} order by id limit {limit};")
                 for query in cursor.fetchall():
                     if method in ['encrypt', 'encrypt_to']:
