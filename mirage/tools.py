@@ -77,6 +77,9 @@ class Migrator:
                         execute_sql += f"update {db_table} set {self.tofield}='{value[1]}' where id='{value[0]}';"
                 cursor.execute(execute_sql)
             if value_list:
-                t.update(value_list[-1][0] - offset)
-                offset = value_list[-1][0]
+                if limit == -1:
+                    t.update(len(value_list) - offset)
+                else:
+                    t.update(value_list[-1][0] - offset)
+                    offset = value_list[-1][0]
         t.close()
