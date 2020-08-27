@@ -72,9 +72,9 @@ class Migrator:
                 execute_sql = ''
                 for value in value_list:
                     if method in ['encrypt', 'decrypt']:
-                        execute_sql += f"update {db_table} set {self.field}='{value[1]}' where id={value[0]};"
+                        execute_sql += f"update {db_table} set {self.field}='{value[1]}' where id='{value[0]}';"
                     elif method in ['copy_to', 'encrypt_to', 'decrypt_to']:
-                        execute_sql += f"update {db_table} set {self.tofield}='{value[1]}' where id={value[0]};"
+                        execute_sql += f"update {db_table} set {self.tofield}='{value[1]}' where id='{value[0]}';"
                 cursor.execute(execute_sql)
             if value_list:
                 t.update(value_list[-1][0] - offset)
