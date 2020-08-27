@@ -40,20 +40,26 @@ class Migrator:
         else:
             db_alias = schema_editor.connection.alias
         db_table = model._meta.db_table if model._meta.db_table else f"{self.app}_{self.model}"
-        if not total:
-            last_record = model.objects.using(db_alias).order_by("-id").first()
-            if last_record:
-                total = last_record.id
-            else:
-                total = 0
-        if limit > total:
-            limit = total
+        if limit == 0:
+            total = model.objects.using(db_alias).count()
+        else:
+            if not total:
+                last_record = model.objects.using(db_alias).order_by("-id").first()
+                if last_record:
+                    total = last_record.id
+                else:
+                    total = 0
+            if limit > total:
+                limit = total
 
         t = tqdm(total=total-offset)
         while offset < total:
             value_list = []
             with connections[db_alias].cursor() as cursor:
-                cursor.execute(f"select id, {self.field} from {db_table} where id>{offset} order by id limit {limit};")
+                if limit == 0:
+                    cursor.execute(f"select id, {self.field} from {db_table};")
+                else
+                    cursor.execute(f"select id, {self.field} from {db_table} where id>{offset} order by id limit {limit};")
                 for query in cursor.fetchall():
                     if method in ['encrypt', 'encrypt_to']:
                         value_list.append([query[0], self.crypto.encrypt(query[1])])
