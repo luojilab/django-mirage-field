@@ -79,6 +79,7 @@ class Migrator:
             if value_list:
                 if limit == -1:
                     t.update(len(value_list) - offset)
+                    offset = total
                 else:
                     t.update(value_list[-1][0] - offset)
                     offset = value_list[-1][0]
