@@ -1,13 +1,13 @@
 import os
 from setuptools import find_packages, setup
 
-with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
+with open(os.path.join(os.path.dirname(__file__), 'README.md'), encoding='utf8') as readme:
     README = readme.read()
 
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 setup(
     name='django-mirage-field',
-    version='1.1.6',
+    version='1.1.7',
     install_requires=[
         "cryptography",
         "tqdm",
