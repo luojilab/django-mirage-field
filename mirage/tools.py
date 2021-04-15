@@ -72,9 +72,15 @@ class Migrator:
                 execute_sql = ''
                 for value in value_list:
                     if method in ['encrypt', 'decrypt']:
-                        execute_sql += f"update {db_table} set {self.field}='{value[1]}' where id='{value[0]}';"
+                        if value[1] is None:
+                            execute_sql += f"update {db_table} set {self.field}=NULL where id='{value[0]}';"
+                        else:
+                            execute_sql += f"update {db_table} set {self.field}='{value[1]}' where id='{value[0]}';"
                     elif method in ['copy_to', 'encrypt_to', 'decrypt_to']:
-                        execute_sql += f"update {db_table} set {self.tofield}='{value[1]}' where id='{value[0]}';"
+                        if value[1] is None:
+                            execute_sql += f"update {db_table} set {self.tofield}=NULL where id='{value[0]}';"
+                        else:
+                            execute_sql += f"update {db_table} set {self.tofield}='{value[1]}' where id='{value[0]}';"
                 cursor.execute(execute_sql)
             if value_list:
                 if limit == -1:
