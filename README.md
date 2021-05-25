@@ -26,28 +26,28 @@ pip install django-mirage-field
 ```python
 from mirage import fields
 class TestModel(models.Model):
-    phone = fields.EncryptedIntegerField()
+    age = fields.EncryptedIntegerField()
 ```
 
 ```python
-obj = TestModel.objects.get(phone=18866677777)
-obj.id          # 123
-obj.phone       # 18866677777
-type(obj.phone) # int
+obj = TestModel.objects.get(age=18)
+obj.id          # 1
+obj.age         # 18
+type(obj.age)   # int
 ```
 
 ```psql
-database=# select * from testmodel where id = 123;
-         id          |           phone
+database=# select * from testmodel where id = 1;
+         id          |           age
 ---------------------+--------------------------
- 123 | -bYijegsEDrmS1s7ilnspA==
+ 1 | -bYijegsEDrmS1s7ilnspA==
 ```
 
 ```python
 from mirage.crypto import Crypto
 c = Crypto(key="")                      # key is optional, default will use settings.SECRET_KEY
-c.encrypt('18866677777')                # -bYijegsEDrmS1s7ilnspA==
-c.decrypt('-bYijegsEDrmS1s7ilnspA==')   # 18866677777
+c.encrypt('some_address')               # -bYijegsEDrmS1s7ilnspA==
+c.decrypt('-bYijegsEDrmS1s7ilnspA==')   # some_address
 ```
 
 ### Settings
