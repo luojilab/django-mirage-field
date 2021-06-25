@@ -11,7 +11,7 @@ A Django model field that encrypt your data when save to and decrypt when get fr
 * Use settings.SECRET_KEY as secret key default or anyelse which length >= 32
 * Support CharField、TextField、IntegerField、EmailField
 * Support Django ORM's `get()`、`filter()` query method
-* Use AES-256-ECB algorithm
+* Support AES-256-ECB/AES-256-CBC
 * Support PostgreSQL and MySQL database
 * Support Django model field `db_index` and `unique` attributes
 
@@ -52,9 +52,24 @@ c.decrypt('-bYijegsEDrmS1s7ilnspA==')   # some_address
 
 ### Settings
 
+#### MIRAGE_SECRET_KEY
+
 You can use the `settings.SECRET_KEY` as default key, if you want custom another key for mirage, set the `MIRAGE_SECRET_KEY` in settings.
 
 Mirage will get the `settings.MIRAGE_SECRET_KEY` first, if not set, mirage will get the `settings.SECRET_KEY`.
+
+#### MIRAGE_CIPHER_MODE
+
+`MIRAGE_CIPHER_MODE` is optional, choices are:
+
+- `ECB`
+- `CBC`
+
+If you don't set, default is `ECB`.
+
+#### MIRAGE_CIPHER_IV
+
+`MIRAGE_CIPHER_IV` is optional, if you don't set, it will use a default: "1234567890abcdef", it's length must be 16.
 
 
 ## Model Fields
@@ -112,6 +127,8 @@ from mirage import exceptions
 1. EncryptedFieldException
 
 ## Performance
+
+### With ECB mode
 
 Migrate data: 6000,000 columns takes 40 minutes, Average 1 column/2.5ms
 
