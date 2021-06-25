@@ -4,9 +4,11 @@
 
 ## Introduce
 
-A Django model field that encrypt your data when save to and decrypt when get from database. It keeps data always encrypted in database. Base on symmetric encryption, it support query the origin text and return encrypted objects in Django.
+A Django model field that encrypt your data when save to DB and decrypt when get from DB. It keeps data always encrypted in DB. Base on AES, it supports query method like `get()` and `filter()` in Django.
 
-## Support
+Mirage can also migrate data from origin column to encrypted column in database with a good performance.
+
+## Features
 
 * Use settings.SECRET_KEY as secret key default or anyelse which length >= 32
 * Support CharField、TextField、IntegerField、EmailField
@@ -51,6 +53,10 @@ c.decrypt('-bYijegsEDrmS1s7ilnspA==')   # some_address
 ```
 
 ## Settings
+
+- MIRAGE_SECRET_KEY
+- MIRAGE_CIPHER_MODE
+- MIRAGE_CIPHER_IV
 
 ### MIRAGE_SECRET_KEY
 
