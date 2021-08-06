@@ -6,12 +6,13 @@ from .crypto import Crypto
 
 
 class Migrator:
-    def __init__(self, app, model, field, key=None, tofield=None):
+    def __init__(self, app, model, field, key=None, tofield=None, idfield='id'):
         self.app = app
         self.model = model.lower()
         self.field = field.lower()
         self.crypto = Crypto(key)
         self.tofield = tofield
+        self.idfield = idfield
 
     def encrypt(self, apps=None, schema_editor=None, offset=0, total=None, limit=1000):
         return self.executor(apps, schema_editor, offset, total, limit, method='encrypt')
@@ -44,9 +45,9 @@ class Migrator:
             total = model.objects.using(db_alias).count()
         else:
             if not total:
-                last_record = model.objects.using(db_alias).order_by("-id").first()
+                last_record = model.objects.using(db_alias).order_by(f"-{self.idfield}").first()
                 if last_record:
-                    total = last_record.id
+                    total = getattr(last_record, self.idfield)
                 else:
                     total = 0
             if limit > total:
@@ -57,9 +58,12 @@ class Migrator:
             value_list = []
             with connections[db_alias].cursor() as cursor:
                 if limit == -1:
-                    cursor.execute(f"select id, {self.field} from {db_table};")
+                    cursor.execute(f"select {self.idfield}, {self.field} from {db_table};")
                 else:
-                    cursor.execute(f"select id, {self.field} from {db_table} where id>{offset} order by id limit {limit};")
+                    cursor.execute(
+                        f"select {self.idfield}, {self.field} from {db_table} where "
+                        "{self.idfield}>{offset} order by {self.idfield} limit {limit};"
+                    )
                 for query in cursor.fetchall():
                     if method in ['encrypt', 'encrypt_to']:
                         value_list.append([query[0], self.crypto.encrypt(query[1])])
@@ -73,14 +77,22 @@ class Migrator:
                 for value in value_list:
                     if method in ['encrypt', 'decrypt']:
                         if value[1] is None:
-                            execute_sql += f"update {db_table} set {self.field}=NULL where id='{value[0]}';"
+                            execute_sql += (
+                                f"update {db_table} set {self.field}=NULL where {self.idfield}='{value[0]}';"
+                            )
                         else:
-                            execute_sql += f"update {db_table} set {self.field}='{value[1]}' where id='{value[0]}';"
+                            execute_sql += (
+                                f"update {db_table} set {self.field}='{value[1]}' where {self.idfield}='{value[0]}';"
+                            )
                     elif method in ['copy_to', 'encrypt_to', 'decrypt_to']:
                         if value[1] is None:
-                            execute_sql += f"update {db_table} set {self.tofield}=NULL where id='{value[0]}';"
+                            execute_sql += (
+                                f"update {db_table} set {self.tofield}=NULL where {self.idfield}='{value[0]}';"
+                            )
                         else:
-                            execute_sql += f"update {db_table} set {self.tofield}='{value[1]}' where id='{value[0]}';"
+                            execute_sql += (
+                                f"update {db_table} set {self.tofield}='{value[1]}' where {self.idfield}='{value[0]}';"
+                            )
                 cursor.execute(execute_sql)
             if value_list:
                 if limit == -1:
