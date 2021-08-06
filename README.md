@@ -13,7 +13,7 @@ Mirage can also migrate data from origin column to encrypted column in database 
 * Use settings.SECRET_KEY as secret key default or anyelse which length >= 32
 * Support CharField、TextField、IntegerField、EmailField
 * Support Django ORM's `get()`、`filter()` query method
-* Support AES-256-ECB and AES-256-CBC(v2.0)
+* Support AES-256-ECB and AES-256-CBC(v1.2.0)
 * Support PostgreSQL and MySQL database
 * Support Django model field `db_index` and `unique` attributes
 
@@ -55,8 +55,8 @@ c.decrypt('-bYijegsEDrmS1s7ilnspA==')   # some_address
 ## Settings
 
 - MIRAGE_SECRET_KEY
-- MIRAGE_CIPHER_MODE (v2.0)
-- MIRAGE_CIPHER_IV (v2.0)
+- MIRAGE_CIPHER_MODE (v1.2)
+- MIRAGE_CIPHER_IV (v1.2)
 
 ### MIRAGE_SECRET_KEY
 
