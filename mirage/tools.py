@@ -62,7 +62,7 @@ class Migrator:
                 else:
                     cursor.execute(
                         f"select {self.idfield}, {self.field} from {db_table} where "
-                        "{self.idfield}>{offset} order by {self.idfield} limit {limit};"
+                        f"{self.idfield}>{offset} order by {self.idfield} limit {limit};"
                     )
                 for query in cursor.fetchall():
                     if method in ['encrypt', 'encrypt_to']:
