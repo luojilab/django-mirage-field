@@ -7,6 +7,10 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from django.conf import settings
 from django.utils.encoding import force_bytes, force_str
 
+SHORT_SECRET_KEY: str = """
+django-mirage-field key length (MIRAGE_SECRET_KEY or SECRET_KEY) must be longer than 32 characters!
+"""
+
 
 class BaseCipher:
     def __init__(self, key, iv) -> None:
@@ -57,7 +61,7 @@ class Crypto:
     def __init__(self, key=None, mode=None, iv=None):
         if key is None:
             key = getattr(settings, "MIRAGE_SECRET_KEY", None) or getattr(settings, "SECRET_KEY")
-        assert len(key) >= 32, "mirage key length must more than 32!"
+        assert len(key) >= 32, SHORT_SECRET_KEY
         key = base64.urlsafe_b64encode(force_bytes(key))[:32]
         if mode is None:
             mode = getattr(settings, "MIRAGE_CIPHER_MODE", "ECB")
