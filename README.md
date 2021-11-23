@@ -48,7 +48,7 @@ database=# select * from testmodel where id = 1;
 
 ```python
 from mirage.crypto import Crypto
-c = Crypto(key="")                      # key is optional, default will use settings.SECRET_KEY
+c = Crypto()                      # key is optional, default will use settings.SECRET_KEY
 c.encrypt('some_address')               # -bYijegsEDrmS1s7ilnspA==
 c.decrypt('-bYijegsEDrmS1s7ilnspA==')   # some_address
 ```

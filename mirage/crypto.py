@@ -27,46 +27,53 @@ class BaseCipher:
 class ECBCipher(BaseCipher):
 
     def encrypt(self, text):
-        encryptor = Cipher(algorithms.AES(self.key), modes.ECB(), default_backend()).encryptor()
+        encryptor = Cipher(algorithms.AES(self.key),
+                           modes.ECB(), default_backend()).encryptor()
         padder = padding.PKCS7(algorithms.AES(self.key).block_size).padder()
         padded_data = padder.update(force_bytes(text)) + padder.finalize()
         encrypted_text = encryptor.update(padded_data) + encryptor.finalize()
         return force_str(base64.urlsafe_b64encode(encrypted_text))
 
     def decrypt(self, encrypted):
-        decryptor = Cipher(algorithms.AES(self.key), modes.ECB(), default_backend()).decryptor()
+        decryptor = Cipher(algorithms.AES(self.key),
+                           modes.ECB(), default_backend()).decryptor()
         padder = padding.PKCS7(algorithms.AES(self.key).block_size).unpadder()
         decrypted_text = decryptor.update(base64.urlsafe_b64decode(encrypted))
         unpadded_text = padder.update(decrypted_text) + padder.finalize()
         return force_str(unpadded_text)
 
+
 class CBCCipher(BaseCipher):
 
     def encrypt(self, text) -> str:
-        encryptor = Cipher(algorithms.AES(self.key), modes.CBC(self.iv), default_backend()).encryptor()
+        encryptor = Cipher(algorithms.AES(self.key), modes.CBC(
+            self.iv), default_backend()).encryptor()
         padder = padding.PKCS7(algorithms.AES(self.key).block_size).padder()
         padded_data = padder.update(force_bytes(text)) + padder.finalize()
         encrypted_text = encryptor.update(padded_data) + encryptor.finalize()
         return force_str(base64.urlsafe_b64encode(encrypted_text))
 
     def decrypt(self, encrypted) -> str:
-        decryptor = Cipher(algorithms.AES(self.key), modes.CBC(self.iv), default_backend()).decryptor()
+        decryptor = Cipher(algorithms.AES(self.key), modes.CBC(
+            self.iv), default_backend()).decryptor()
         padder = padding.PKCS7(algorithms.AES(self.key).block_size).unpadder()
         decrypted_text = decryptor.update(base64.urlsafe_b64decode(encrypted))
         unpadded_text = padder.update(decrypted_text) + padder.finalize()
         return force_str(unpadded_text)
 
+
 class Crypto:
 
     def __init__(self, key=None, mode=None, iv=None):
-        if key is None:
-            key = getattr(settings, "MIRAGE_SECRET_KEY", None) or getattr(settings, "SECRET_KEY")
+        if not key:
+            key = getattr(settings, "MIRAGE_SECRET_KEY",
+                          None) or getattr(settings, "SECRET_KEY")
         assert len(key) >= 32, SHORT_SECRET_KEY
         key = base64.urlsafe_b64encode(force_bytes(key))[:32]
         if mode is None:
             mode = getattr(settings, "MIRAGE_CIPHER_MODE", "ECB")
         if iv is None:
-            iv=getattr(settings, "MIRAGE_CIPHER_IV", "1234567890abcdef")
+            iv = getattr(settings, "MIRAGE_CIPHER_IV", "1234567890abcdef")
         self.cipher = eval(f"{mode}Cipher")(key=key, iv=force_bytes(iv))
 
     def encrypt(self, text):
