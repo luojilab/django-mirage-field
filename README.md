@@ -56,8 +56,8 @@ c.decrypt('-bYijegsEDrmS1s7ilnspA==')   # some_address
 ## Settings
 
 - MIRAGE_SECRET_KEY
-- MIRAGE_CIPHER_MODE (v1.2)
-- MIRAGE_CIPHER_IV (v1.2)
+- MIRAGE_CIPHER_MODE (v1.2.0+)
+- MIRAGE_CIPHER_IV (v1.2.0+)
 
 ### MIRAGE_SECRET_KEY
 
@@ -88,7 +88,7 @@ Mirage will get the `settings.MIRAGE_SECRET_KEY` first, if not set, mirage will 
 
 Add`mirage`to`INSTALLED_APPS`
 
-### 1. Migrations
+### Way 1. Migrations
 
 add `app_name`,`model_name`,`field_name` in [migrations.RunPython](https://docs.djangoproject.com/en/2.2/ref/migration-operations/#runpython)
 
@@ -98,7 +98,7 @@ from mirage.tools import Migrator
 migrations.RunPython(Migrator("app_name", "model_name", "field_name").encrypt, reverse_code=Migrator("app_name", 'model_name', 'field_name').decrypt),
 ```
 
-### 2. Commands
+### Way 2. Commands
 
 Options:
 
