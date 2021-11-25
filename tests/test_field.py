@@ -1,5 +1,5 @@
 from django.test import TestCase
-from .models import TestModel
+from apps.models import TestModel
 
 
 class TestField(TestCase):
