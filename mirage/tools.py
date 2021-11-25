@@ -45,7 +45,8 @@ class Migrator:
             total = model.objects.using(db_alias).count()
         else:
             if not total:
-                last_record = model.objects.using(db_alias).order_by(f"-{self.idfield}").first()
+                last_record = model.objects.using(
+                    db_alias).order_by(f"-{self.idfield}").first()
                 if last_record:
                     total = getattr(last_record, self.idfield)
                 else:
@@ -58,7 +59,8 @@ class Migrator:
             value_list = []
             with connections[db_alias].cursor() as cursor:
                 if limit == -1:
-                    cursor.execute(f"select {self.idfield}, {self.field} from {db_table};")
+                    cursor.execute(
+                        f"select {self.idfield}, {self.field} from {db_table};")
                 else:
                     cursor.execute(
                         f"select {self.idfield}, {self.field} from {db_table} where "
@@ -66,13 +68,18 @@ class Migrator:
                     )
                 for query in cursor.fetchall():
                     if method in ['encrypt', 'encrypt_to']:
-                        value_list.append([query[0], self.crypto.encrypt(query[1])])
+                        value_list.append(
+                            [query[0], self.crypto.encrypt(query[1])])
                     elif method in ['decrypt', 'decrypt_to']:
-                        text = self.crypto.decrypt(query[1]) or ''
-                        value_list.append([query[0], text.replace("'", "''")])
+                        text = self.crypto.decrypt(query[1])
+                        if isinstance(text, str):
+                            text = text.replace("'", "''")
+                        value_list.append([query[0], text])
                     elif method == 'copy_to':
-                        text = query[1] or ''
-                        value_list.append([query[0], text.replace("'", "''")])
+                        text = query[1]
+                        if isinstance(text, str):
+                            text = text.replace("'", "''")
+                        value_list.append([query[0], text])
                 execute_sql = ''
                 for value in value_list:
                     if method in ['encrypt', 'decrypt']:
