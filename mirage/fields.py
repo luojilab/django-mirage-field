@@ -25,9 +25,9 @@ class EncryptedMixin(models.Field):
         return None
 
     def from_db_value(self, value, expression, connection, *args):
-        if value is not None:
-            return self.to_python(self.crypto.decrypt(value))
-        return None
+        if value is None:
+            return value
+        return self.to_python(self.crypto.decrypt(value))
 
     def get_internal_type(self):
         return self.internal_type
@@ -38,7 +38,7 @@ class EncryptedTextField(EncryptedMixin, models.TextField):
 
 
 class EncryptedCharField(EncryptedMixin, models.CharField):
-    prepared_max_length =255
+    prepared_max_length = 255
 
 
 class EncryptedEmailField(EncryptedMixin, models.EmailField):
@@ -49,16 +49,10 @@ class EncryptedIntegerField(EncryptedMixin, models.CharField):
     prepared_max_length = 64
 
     def to_python(self, value):
-        if value is None:
-            return value
         try:
             return int(value)
         except (TypeError, ValueError):
-            raise exceptions.ValidationError(
-                self.error_messages['invalid'],
-                code='invalid',
-                params={'value': value},
-            )
+            return value
 
     def check(self, **kwargs):
         return [
