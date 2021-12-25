@@ -16,6 +16,7 @@ class TestField(TestCase):
         obj.text = cls.TEXT
         obj.integer = cls.INTEGER
         obj.email = cls.EMAIL
+        obj.url = cls.URL
         obj.save()
 
     def setUp(self):
