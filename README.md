@@ -5,7 +5,7 @@
 
 ## Introduce
 
-A Django model field that encrypt your data when save to DB and decrypt when get from DB. It keeps data always encrypted in DB. Base on AES, it supports query method like `get()` and `filter()` in Django.
+A Django model fields collection that encrypt your data when save to and decrypt when get from database. It keeps data always encrypted in database. Base on AES, it supports query method like `get()` and `filter()` in Django.
 
 Mirage can also migrate data from origin column to encrypted column in database with a good performance.
 
@@ -83,6 +83,7 @@ Mirage will get the `settings.MIRAGE_SECRET_KEY` first, if not set, mirage will 
 2. EncryptedCharField
 3. EncryptedEmailField
 4. EncryptedIntegerField
+5. EncryptedURLField(v1.3.0+)
 
 ## Data Migrate
 

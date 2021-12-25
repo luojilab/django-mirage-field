@@ -41,6 +41,10 @@ class EncryptedCharField(EncryptedMixin, models.CharField):
     prepared_max_length = 255
 
 
+class EncryptedURLField(EncryptedMixin, models.URLField):
+    prepared_max_length = 200
+
+
 class EncryptedEmailField(EncryptedMixin, models.EmailField):
     prepared_max_length = 254
 

@@ -8,3 +8,4 @@ class TestModel(models.Model):
     textraw = models.TextField(blank=True, null=True)
     integer = fields.EncryptedIntegerField(blank=True, null=True)
     email = fields.EncryptedEmailField(blank=True, null=True)
+    url = fields.EncryptedURLField(blank=True, null=True)

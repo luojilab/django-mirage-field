@@ -7,6 +7,7 @@ class TestField(TestCase):
     TEXT = 'hello,text'
     INTEGER = 1234567890
     EMAIL = 'hello@email.com'
+    URL = 'https://yindongliang.com'
 
     @classmethod
     def setUpTestData(cls):
@@ -35,3 +36,7 @@ class TestField(TestCase):
     def test_email_field(self):
         self.assertEqual(self.obj.email, self.EMAIL)
         self.assertEqual(type(self.obj.email), str)
+
+    def test_url_field(self):
+        self.assertEqual(self.obj.url, self.URL)
+        self.assertEqual(type(self.obj.url), str)

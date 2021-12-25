@@ -7,7 +7,7 @@ with open(os.path.join(os.path.dirname(__file__), 'README.md'), encoding='utf8')
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 setup(
     name='django-mirage-field',
-    version='1.2.4',
+    version='1.3.0',
     install_requires=[
         "cryptography",
         "tqdm",
@@ -15,7 +15,7 @@ setup(
     packages=find_packages(exclude=["tests*"]),
     include_package_data=True,
     license='MIT License',
-    description='A Django model field that encrypt your data when save to and decrypt when get from database. It keeps data always encrypted in database.',
+    description='A Django model fields collection that encrypt your data when save to and decrypt when get from database. It keeps data always encrypted in database.',
     long_description_content_type="text/markdown",
     long_description=README,
     url='https://github.com/luojilab/django-mirage-field',
@@ -24,19 +24,15 @@ setup(
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Django',
-        'Framework :: Django :: 1.8',
-        'Framework :: Django :: 1.9',
-        'Framework :: Django :: 1.10',
-        'Framework :: Django :: 1.11',
-        'Framework :: Django :: 2.0',
-        'Framework :: Django :: 2.1',
         'Framework :: Django :: 2.2',
-        'Framework :: Django :: 3.0',
+        'Framework :: Django :: 3.2',
+        'Framework :: Django :: 4.0',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.9',
         'Topic :: Internet :: WWW/HTTP',
     ],
 )
