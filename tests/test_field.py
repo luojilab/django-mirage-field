@@ -1,3 +1,4 @@
+import json
 from django.test import TestCase
 from apps.models import TestModel
 
@@ -8,6 +9,7 @@ class TestField(TestCase):
     INTEGER = 1234567890
     EMAIL = 'hello@email.com'
     URL = 'https://yindongliang.com'
+    JSON = {"hello": "world", "foo": "bar"}
 
     @classmethod
     def setUpTestData(cls):
@@ -17,6 +19,7 @@ class TestField(TestCase):
         obj.integer = cls.INTEGER
         obj.email = cls.EMAIL
         obj.url = cls.URL
+        obj.json = cls.JSON
         obj.save()
 
     def setUp(self):
@@ -41,3 +44,7 @@ class TestField(TestCase):
     def test_url_field(self):
         self.assertEqual(self.obj.url, self.URL)
         self.assertEqual(type(self.obj.url), str)
+
+    def test_json_field(self):
+        self.assertEqual(self.obj.json, self.JSON)
+        self.assertEqual(type(self.obj.json), dict)

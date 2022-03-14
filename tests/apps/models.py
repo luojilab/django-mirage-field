@@ -1,3 +1,4 @@
+from email.policy import default
 from django.db import models
 from mirage import fields
 
@@ -9,3 +10,4 @@ class TestModel(models.Model):
     integer = fields.EncryptedIntegerField(blank=True, null=True)
     email = fields.EncryptedEmailField(blank=True, null=True)
     url = fields.EncryptedURLField(blank=True, null=True)
+    json = fields.EncryptedJSONField(default={})

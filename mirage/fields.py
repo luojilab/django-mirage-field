@@ -1,7 +1,9 @@
+import json
 from django.core import exceptions
 from django.db import models
 from .crypto import Crypto
 from .exceptions import EncryptedFieldException
+from django.db.models.fields.json import KeyTransform
 
 
 class EncryptedMixin(models.Field):
@@ -35,6 +37,24 @@ class EncryptedMixin(models.Field):
 
 class EncryptedTextField(EncryptedMixin, models.TextField):
     internal_type = "TextField"
+
+class EncryptedJSONField(EncryptedMixin, models.JSONField):
+    internal_type = "TextField"
+
+    def from_db_value(self, value, expression, connection):
+        if value is None:
+            return value
+        if isinstance(expression, KeyTransform) and not isinstance(value, str):
+            return value
+        try:
+            return json.loads(self.crypto.decrypt(value), cls=self.decoder)
+        except json.JSONDecodeError as e:
+            return self.crypto.decrypt(value)
+
+    def get_prep_value(self, value):
+        if value is None:
+            return value
+        return json.dumps(self.crypto.encrypt(json.dumps(value, cls=self.encoder)), cls=self.encoder)
 
 
 class EncryptedCharField(EncryptedMixin, models.CharField):

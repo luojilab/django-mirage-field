@@ -7,7 +7,7 @@ with open(os.path.join(os.path.dirname(__file__), 'README.md'), encoding='utf8')
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 setup(
     name='django-mirage-field',
-    version='1.3.0',
+    version='1.4.0',
     install_requires=[
         "cryptography",
         "tqdm",
