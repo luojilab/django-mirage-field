@@ -3,6 +3,10 @@
 ![](https://img.shields.io/pypi/v/django-mirage-field.svg?label=django-mirage-field)
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fluojilab%2Fdjango-mirage-field&count_bg=%233DC8BC&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=views&edge_flat=false)](https://hits.seeyoufarm.com)
 
+## NOTE!!!
+
+The maintainer [tcitry](https://github.com/tcitry) has resigned from luojilab, he won't contribute this project ever, the latest code please refer: [tcitry/django-mirage-field](https://github.com/tcitry/django-mirage-field).
+
 ## Introduce
 
 A Django model fields collection that encrypt your data when save to and decrypt when get from database. It keeps data always encrypted in database. Base on AES, it supports query method like `get()` and `filter()` in Django.
